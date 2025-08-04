@@ -25,12 +25,12 @@ int main() {
         return -1;
     }
 
-    double dt = 1.0; // Time step in seconds
-
     // Main simulation loop
     while (!renderer.window_should_close()) {
-        apply_gravity(particles, dt);
-        integrate(particles, dt);
+        if (!renderer.simParams.paused) {
+            apply_gravity(particles, renderer.simParams.dt);
+            integrate(particles, renderer.simParams.dt);
+        }
 
         renderer.render(particles);
     }

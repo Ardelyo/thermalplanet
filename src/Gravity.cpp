@@ -18,6 +18,21 @@ void apply_gravity(std::vector<Particle>& particles, double dt) {
                 double fy = force * dy / dist;
                 double fz = force * dz / dist;
 
+                // Calculate kinetic energy change due to gravitational interaction
+                double v_rel_sq = 
+                    (particles[j].vx - particles[i].vx) * (particles[j].vx - particles[i].vx) +
+                    (particles[j].vy - particles[i].vy) * (particles[j].vy - particles[i].vy) +
+                    (particles[j].vz - particles[i].vz) * (particles[j].vz - particles[i].vz);
+                
+                // Convert some kinetic energy to heat
+                double heat_factor = 0.1; // 10% of kinetic energy goes to heat
+                double heat_transfer = heat_factor * 0.5 * v_rel_sq * dt;
+                
+                // Update temperatures based on kinetic energy conversion
+                particles[i].temperature += heat_transfer / particles[i].mass;
+                particles[j].temperature += heat_transfer / particles[j].mass;
+
+                // Apply gravitational forces
                 particles[i].vx += fx / particles[i].mass * dt;
                 particles[i].vy += fy / particles[i].mass * dt;
                 particles[i].vz += fz / particles[i].mass * dt;
