@@ -61,6 +61,7 @@ target_include_directories(theia PRIVATE
     ${imgui_SOURCE_DIR}/backends
     ${CMAKE_SOURCE_DIR}/deps/glad/include)
 target_compile_definitions(theia PRIVATE IMGUI_IMPL_OPENGL_LOADER_GLAD)
+target_compile_options(theia PRIVATE $<$<COMPILE_LANGUAGE:C>:/wd4133>)
 
 # Add ImGui sources (example, adjust as needed)
 target_sources(theia PRIVATE
