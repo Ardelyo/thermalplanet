@@ -6,6 +6,8 @@
 #include "Integrator.h"
 #include "Renderer.h"
 
+#include "DataManager.h"
+
 int main() {
     std::cout << "Project Theia Initialized!" << std::endl;
 
@@ -27,9 +29,20 @@ int main() {
 
     // Main simulation loop
     while (!renderer.window_should_close()) {
+        if (glfwGetKey(renderer.get_window(), GLFW_KEY_S) == GLFW_PRESS) {
+            DataManager::save_state("simulation_state.bin", particles);
+            std::cout << "Simulation state saved." << std::endl;
+        }
+
+        if (glfwGetKey(renderer.get_window(), GLFW_KEY_L) == GLFW_PRESS) {
+            DataManager::load_state("simulation_state.bin", particles);
+            std.cout << "Simulation state loaded." << std::endl;
+        }
+
         if (!renderer.simParams.paused) {
             apply_gravity(particles, renderer.simParams.dt);
-            integrate(particles, renderer.simParams.dt);
+            rk4_integrate(particles, renderer.simParams.dt);
+            handle_collisions(particles);
         }
 
         renderer.render(particles);

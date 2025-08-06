@@ -5,6 +5,7 @@ struct Particle {
     double px, py, pz; // Position
     double vx, vy, vz; // Velocity
     double mass;
+    double radius;
     double temperature;
 };
 

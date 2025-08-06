@@ -89,6 +89,9 @@ bool Renderer::init(int width, int height, const char* title) {
 void Renderer::render(const std::vector<Particle>& particles) {
     processInput(window);
 
+    // Update particle count
+    simParams.particleCount = particles.size();
+
     // Start ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -104,6 +107,9 @@ void Renderer::render(const std::vector<Particle>& particles) {
 
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, &view[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, &projection[0][0]);
+
+    // Set particle size
+    glPointSize(simParams.particleSize);
 
     glBindVertexArray(VAO);
     
@@ -156,7 +162,27 @@ void Renderer::renderImGui() {
     ImGui::SliderFloat("Time Step", &simParams.dt, 0.1f, 10.0f, "%.1f s");
     ImGui::SliderFloat("Min Temperature", &simParams.minTemp, 500.0f, 2000.0f, "%.0f K");
     ImGui::SliderFloat("Max Temperature", &simParams.maxTemp, 2000.0f, 5000.0f, "%.0f K");
-    
+
+    ImGui::Separator();
+
+    ImGui::Text("Physical Constants");
+    ImGui::SliderFloat("Gravitational Constant", &simParams.G, 1e-11f, 1e-10f, "%.2e");
+
+    ImGui::Separator();
+
+    ImGui::Text("Visualization");
+    ImGui::SliderFloat("Particle Size", &simParams.particleSize, 1.0f, 10.0f, "%.1f");
+
+    ImGui::Separator();
+
+    if (ImGui::Button("Reset Simulation")) {
+        // Add logic to reset the simulation here
+    }
+
+    ImGui::Separator();
+
+    ImGui::Text("Particle Count: %d", simParams.particleCount);
+
     ImGui::End();
 }
 
@@ -168,7 +194,8 @@ void Renderer::cleanup() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &tempVBO);
-    glDeleteProgram(shaderProgram);
+    glDeleteProgram(particleShaderProgram);
+    glDeleteProgram(vectorShaderProgram);
     glfwTerminate();
 }
 

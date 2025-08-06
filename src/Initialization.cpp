@@ -37,12 +37,14 @@ void initialize_spheres(
         p.vy = target_vy;
         p.vz = target_vz;
         p.mass = target_particle_mass;
+        p.radius = target_particle_radius;
         p.temperature = 2000; // Initial temp
         particles.push_back(p);
     }
 
     // Impactor
     double impactor_particle_mass = impactor_mass / num_particles_impactor;
+    double impactor_particle_radius = impactor_radius / std::cbrt(num_particles_impactor);
     for (int i = 0; i < num_particles_impactor; ++i) {
         double x, y, z, r2;
         do {
@@ -59,6 +61,7 @@ void initialize_spheres(
         p.vy = impactor_vy;
         p.vz = impactor_vz;
         p.mass = impactor_particle_mass;
+        p.radius = impactor_particle_radius;
         p.temperature = 2000; // Initial temp
         particles.push_back(p);
     }

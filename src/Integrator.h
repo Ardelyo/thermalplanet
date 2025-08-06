@@ -4,6 +4,7 @@
 #include <vector>
 #include "Particle.h"
 
-void integrate(std::vector<Particle>& particles, double dt);
+void rk4_integrate(std::vector<Particle>& particles, double dt);
+void handle_collisions(std::vector<Particle>& particles);
 
 #endif // INTEGRATOR_H
